@@ -9,17 +9,14 @@ from main import InstagramDownloaderApp
 
 class TestInstagramDownloaderApp(unittest.TestCase):
 
-    @patch('tkinter.Tk', autospec=True)
-    def setUp(self, MockTk):
-        # Create an instance of the actual Tk root for the test
+    def setUp(self):
+        # Create a real instance of Tk for the test
         self.root = tk.Tk()
-        MockTk.return_value = self.root
-
-        # Now initialize the application with the real root window
+        self.root.withdraw()  # Prevent the Tk window from appearing
         self.app = InstagramDownloaderApp(self.root)
 
     def tearDown(self):
-        # Destroy the Tk root window after tests
+        # Destroy the Tk instance after tests
         self.root.destroy()
 
     @patch('main.instaloader.Instaloader')
