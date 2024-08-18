@@ -1,4 +1,3 @@
-# __tests__/test_main.py
 import unittest
 from unittest.mock import patch, MagicMock
 import tkinter as tk
@@ -10,13 +9,11 @@ from main import InstagramDownloaderApp
 class TestInstagramDownloaderApp(unittest.TestCase):
 
     def setUp(self):
-        # Create a real instance of Tk for the test
         self.root = tk.Tk()
         self.root.withdraw()  # Prevent the Tk window from appearing
         self.app = InstagramDownloaderApp(self.root)
 
     def tearDown(self):
-        # Destroy the Tk instance after tests
         self.root.destroy()
 
     @patch('main.instaloader.Instaloader')
@@ -36,30 +33,31 @@ class TestInstagramDownloaderApp(unittest.TestCase):
         mock_response.iter_content.return_value = [b'chunk1', b'chunk2']
         mock_requests_get.return_value = mock_response
 
-        # Create a temporary directory for the test
         with tempfile.TemporaryDirectory() as temp_dir:
             url = 'http://instagram.com/p/shortcode/'
             self.app.download_video(url, temp_dir)
 
-            # Check the expected file path
             video_filename = os.path.join(temp_dir, 'shortcode.mp4')
 
-            # Verify if the video file was created
             self.assertTrue(os.path.exists(video_filename),
                             "Video file was not created")
 
-        # Clean up
         if os.path.exists(video_filename):
             os.remove(video_filename)
 
+    @patch('tkinter.messagebox.showinfo')
+    @patch('tkinter.messagebox.showerror')
     @patch('main.filedialog.askdirectory')
-    def test_browse_folder(self, mock_askdirectory):
+    def test_browse_folder(self, mock_askdirectory, mock_showerror, mock_showinfo):
+        mock_showinfo.return_value = None
+        mock_showerror.return_value = None
         mock_askdirectory.return_value = '/mock/folder'
         self.app.browse_folder()
         self.assertEqual(self.app.folder_entry.get(), '/mock/folder')
 
-    @patch('main.messagebox.showerror')
+    @patch('tkinter.messagebox.showerror')
     def test_start_download_no_url_or_folder(self, mock_showerror):
+        mock_showerror.return_value = None
         self.app.url_entry.delete(0, tk.END)
         self.app.folder_entry.delete(0, tk.END)
         self.app.start_download()
@@ -70,14 +68,12 @@ class TestInstagramDownloaderApp(unittest.TestCase):
     @patch('main.instaloader.Instaloader')
     @patch('main.instaloader.Post.from_shortcode')
     def test_download_video_error_handling(self, mock_from_shortcode, mock_instaloader, mock_requests_get):
-        # Setup mocks to raise an exception
         mock_requests_get.side_effect = Exception("Download failed")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             url = 'http://instagram.com/p/shortcode/'
             self.app.download_video(url, temp_dir)
 
-            # Ensure no video file was created
             video_filename = os.path.join(temp_dir, 'shortcode.mp4')
             self.assertFalse(os.path.exists(video_filename),
                              "Video file was created despite error")
