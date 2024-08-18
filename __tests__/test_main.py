@@ -16,7 +16,7 @@ class TestInstagramDownloaderApp(unittest.TestCase):
     def tearDown(self):
         self.root.destroy()
 
-    @unittest.skipIf(os.getenv('SKIP_GUI_TESTS'), "Skipping GUI-related test due to environment variable")
+    @unittest.skipIf(os.getenv('SKIP_GUI_TESTS') == '1', "Skipping GUI-related test due to environment variable")
     @patch('main.instaloader.Instaloader')
     @patch('main.instaloader.Post.from_shortcode')
     @patch('main.requests.get')
@@ -46,7 +46,7 @@ class TestInstagramDownloaderApp(unittest.TestCase):
         if os.path.exists(video_filename):
             os.remove(video_filename)
 
-    @unittest.skipIf(os.getenv('SKIP_GUI_TESTS'), "Skipping GUI-related test due to environment variable")
+    @unittest.skipIf(os.getenv('SKIP_GUI_TESTS') == '1', "Skipping GUI-related test due to environment variable")
     @patch('tkinter.messagebox.showinfo')
     @patch('tkinter.messagebox.showerror')
     @patch('main.filedialog.askdirectory')
@@ -57,6 +57,7 @@ class TestInstagramDownloaderApp(unittest.TestCase):
         self.app.browse_folder()
         self.assertEqual(self.app.folder_entry.get(), '/mock/folder')
 
+    @unittest.skipIf(os.getenv('SKIP_GUI_TESTS') == '1', "Skipping GUI-related test due to environment variable")
     @patch('tkinter.messagebox.showerror')
     def test_start_download_no_url_or_folder(self, mock_showerror):
         mock_showerror.return_value = None
@@ -66,6 +67,7 @@ class TestInstagramDownloaderApp(unittest.TestCase):
         mock_showerror.assert_called_with(
             "Error", "Please enter the URL and select a download folder.")
 
+    @unittest.skipIf(os.getenv('SKIP_GUI_TESTS') == '1', "Skipping GUI-related test due to environment variable")
     @patch('main.requests.get')
     @patch('main.instaloader.Instaloader')
     @patch('main.instaloader.Post.from_shortcode')
