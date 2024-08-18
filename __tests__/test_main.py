@@ -81,5 +81,15 @@ class TestInstagramDownloaderApp(unittest.TestCase):
                              "Video file was created despite error")
 
 
+def suite():
+    suite = unittest.TestSuite()
+    suite.addTest(TestInstagramDownloaderApp(
+        'test_start_download_no_url_or_folder'))
+    suite.addTest(TestInstagramDownloaderApp(
+        'test_download_video_error_handling'))
+    return suite
+
+
 if __name__ == '__main__':
-    unittest.main()
+    runner = unittest.TextTestRunner()
+    runner.run(suite())
