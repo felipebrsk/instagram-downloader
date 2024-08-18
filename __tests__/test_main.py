@@ -1,19 +1,21 @@
 # __tests__/test_main.py
 import unittest
 from unittest.mock import patch, MagicMock
-import os
 import tkinter as tk
 import tempfile
+import os
 from main import InstagramDownloaderApp
 
 
 class TestInstagramDownloaderApp(unittest.TestCase):
 
-    @patch('tkinter.Tk')
+    @patch('tkinter.Tk', autospec=True)
     def setUp(self, MockTk):
-        # Initialize the root Tk instance with the necessary attributes
-        self.root = MockTk()
-        self.root.tk = tk.Tk()  # Properly initialize the tk attribute with an actual Tk object
+        # Create an instance of the actual Tk root for the test
+        self.root = tk.Tk()
+        MockTk.return_value = self.root
+
+        # Now initialize the application with the real root window
         self.app = InstagramDownloaderApp(self.root)
 
     def tearDown(self):
