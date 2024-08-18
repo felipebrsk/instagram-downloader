@@ -9,9 +9,10 @@ from main import InstagramDownloaderApp
 
 class TestInstagramDownloaderApp(unittest.TestCase):
 
-    def setUp(self):
-        # Create a Tk root window instance for testing
-        self.root = tk.Tk()
+    @patch('tkinter.Tk', autospec=True)
+    def setUp(self, MockTk):
+        # Mock the root Tk instance
+        self.root = MockTk()
         self.app = InstagramDownloaderApp(self.root)
 
     def tearDown(self):
