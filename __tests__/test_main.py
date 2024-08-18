@@ -16,6 +16,7 @@ class TestInstagramDownloaderApp(unittest.TestCase):
     def tearDown(self):
         self.root.destroy()
 
+    @unittest.skipIf(os.getenv('SKIP_GUI_TESTS'), "Skipping GUI-related test due to environment variable")
     @patch('main.instaloader.Instaloader')
     @patch('main.instaloader.Post.from_shortcode')
     @patch('main.requests.get')
@@ -45,6 +46,7 @@ class TestInstagramDownloaderApp(unittest.TestCase):
         if os.path.exists(video_filename):
             os.remove(video_filename)
 
+    @unittest.skipIf(os.getenv('SKIP_GUI_TESTS'), "Skipping GUI-related test due to environment variable")
     @patch('tkinter.messagebox.showinfo')
     @patch('tkinter.messagebox.showerror')
     @patch('main.filedialog.askdirectory')
