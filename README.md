@@ -5,7 +5,7 @@
 Before run the code, you should install the libs:
 
 ```
-$ pip install instaloader moviepy requests
+$ pip install -r requirements.txt
 ```
 
 ### After that, follow these steps:
