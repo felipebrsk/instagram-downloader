@@ -9,10 +9,11 @@ from main import InstagramDownloaderApp
 
 class TestInstagramDownloaderApp(unittest.TestCase):
 
-    @patch('tkinter.Tk', autospec=True)
+    @patch('tkinter.Tk')
     def setUp(self, MockTk):
-        # Mock the root Tk instance
+        # Mock the root Tk instance with the necessary attributes
         self.root = MockTk()
+        self.root.tk = MagicMock()  # Add the 'tk' attribute to the mock
         self.app = InstagramDownloaderApp(self.root)
 
     def tearDown(self):
